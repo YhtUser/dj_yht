@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	namespace:用于隔离SQL全局唯一（采用接口和XML开发时为接口的全路径）
+ -->
+<mapper namespace="com.dj.springboot.mapper.StudentMapper">
+	<!-- 
+		id:SQL的唯一标识（采用接口和XML开发时id为接口的方法名）
+		parameterType：sql参数类型（可以是基本数据类型和应用数据类型）
+		resultType：返回数据类型
+		#{}预编译中的?对应的参数值引用
+	 -->
+
+	
+	<!--  动态代码块 -->
+
+	<!--  登录 -->
+	 <select id="findUserById" parameterType="Student" resultType="Student">
+	 	select * from student where id = #{id}
+	 </select>
+
+	 <!-- 查询集合 -->
+	 <select id="findStudent" resultType="Student">
+	 	select * from student
+	 </select>
+	 
+	<!--  增加 -->
+	<insert id="insertUser" parameterType="Student" >
+		<selectKey keyProperty="id" order="AFTER" resultType="Integer">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into student (name,age) values (#{name},#{age})
+	</insert>
+	 
+
+	
+	<!-- 修改 -->
+	<update id="updateUser" parameterType="Student">
+		update student
+		<set>
+			<if test="name != null and name != ''">
+				name = #{name},
+			</if>
+			<if test="age != null and age != ''">
+				age = #{age},
+			</if>
+
+		</set>
+		where id = #{id}
+	</update>
+
+	<!-- 删除 -->
+	<delete id="deleteAll" parameterType="Integer">
+		delete from student where id = #{id}
+	</delete>
+
+</mapper>
